@@ -2,7 +2,7 @@
 
 This is just an **e**mbeddable **r**andom **go**lang **la**nguage for **s**cripting. Recently I use Golang very often and sometimes I want to add some extensibility features to my projects using some kind of scripting languages or DSL so I made this mini language for experimenting. There is an included tree walking interpreter but I plan to make it really easy to just parse an expression and get an AST to evaluate with a custom interpreter. 
 
-The syntax is very simple and pretty general and inherits many things from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [REBOL](http://www.rebol.com/) / [Red](https://www.red-lang.org/).
+The syntax is very simple and pretty general and inherits many things from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/) and [Julia](https://julialang.org/).
 
 ```lua
 println "Hello, World!"
