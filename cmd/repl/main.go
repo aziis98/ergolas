@@ -14,6 +14,10 @@ import (
 // ctx is the main repl evaluation context. This is a global as this is just a small experimental repl and this way I don't need to pass the context thorough every function call.
 var ctx = ergolas.NewRootContext()
 
+func init() {
+	log.SetFlags(log.Lshortfile | log.Lmsgprefix)
+}
+
 func main() {
 	color.Set(color.Italic)
 	fmt.Println()
