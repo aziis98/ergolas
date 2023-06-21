@@ -52,6 +52,7 @@ var (
 	IntegerToken     TokenType = "Integer"
 	StringToken      TokenType = "String"
 	QuoteToken       TokenType = "Quote"
+	UnquoteToken     TokenType = "Unquote"
 	LOperatorToken   TokenType = "LOperator"
 	ROperatorToken   TokenType = "ROperator"
 	PunctuationToken TokenType = "Punctuation"
@@ -70,10 +71,12 @@ var rules = []rule{
 		Regex: regexp.MustCompile(`^"(\\.|[^"])*"`)},
 	{Type: ROperatorToken, // The operators ":=", "::", "<-", "->" and "|>" are right associative
 		Regex: regexp.MustCompile(`^(\:\=|\:\:)`)},
-	{Type: LOperatorToken,
-		Regex: regexp.MustCompile(`^[\+\-\*\/\%\=\<\>\!\&\|\^]+`)},
 	{Type: QuoteToken,
 		Regex: regexp.MustCompile(`^:`)},
+	{Type: UnquoteToken,
+		Regex: regexp.MustCompile(`^\$`)},
+	{Type: LOperatorToken,
+		Regex: regexp.MustCompile(`^[\+\-\*\/\%\=\<\>\!\&\|\^]+`)},
 	{Type: PunctuationToken,
 		Regex: regexp.MustCompile(`^[\.\,\;\(\)\[\]\{\}]`)},
 	{Type: IdentifierToken,

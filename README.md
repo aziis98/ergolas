@@ -15,9 +15,9 @@ println "Hello, World!"
     - [x] Property access
     - [x] Quoted forms
     - [x] Binary operators
+    - [x] Quasi-quotes with `:` for quoting and `$` for unquoting (might change `:` to `#` and comments to `//`)
     - [ ] Unary operators
-    - [ ] String templating (for now missing, maybe something can be done just using quoted forms)
-    - [ ] Quasi-quotes (Yeah I forgot about them, maybe I will make `"=" <Expr>` be the `unquote` operator)
+    - [ ] String templating (for now missing, maybe something can be done just using quasiquotes)
 - [ ] Interpreter
     - [ ] Simple tree walking interpreter
         - [x] Basic operators and arithmetic
@@ -90,6 +90,24 @@ println "a" "b" c"
 exit 1
 ```
 
+### Anonymous Functions
+
+```perl
+# [x] Parses ok, [ ] Evals ok
+
+# anonymous function with params
+my-func := fn x y { x + y }
+```
+
+```perl
+# [ ] Parses ok, [ ] Evals ok
+
+# anonymous lexical block without params, can be called with a context
+my-block := { x + y }
+ctx := Map [ x -> 1, y -> 2 ]
+call my-block ctx
+```
+
 ### Operators
 
 The following binds "a" to 9, arithmetic operators don't have any precedence and are all left associative. There are a only a few right associative operators that for now just are `:=`, `::` even if only `:=` is used for binding variables, `::` will later be used to tell the type of variables.
@@ -106,6 +124,14 @@ a := 1 + 2 * 3
 operator lhs ++ rhs {
     return List.join lhs rhs
 }
+```
+
+### Quotes
+
+```perl
+# [x] Parses ok, [ ] Evals ok
+a := (1 + 1) # 2
+b := :(1 + 1) # :(1 + 1)
 ```
 
 ### Misc

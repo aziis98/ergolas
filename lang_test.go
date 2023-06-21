@@ -33,6 +33,38 @@ func ExampleParse_function_call_precedence() {
 
 }
 
+func ExampleParse_quasiquote() {
+	tokens, err := ergolas.Tokenize(`:(1 + 2 + $(2 * 2))`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	node, err := ergolas.ParseExpression(tokens)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Ast:")
+	ergolas.PrintAST(node)
+
+	// Output:
+	// Ast:
+	// - Quoted
+	//   - Parenthesis
+	//     - Binary
+	//       - Binary
+	//         - Integer { Value: "1" }
+	//         - Operator { Value: "+" }
+	//         - Integer { Value: "2" }
+	//       - Operator { Value: "+" }
+	//       - Unquote
+	//         - Parenthesis
+	//           - Binary
+	//             - Integer { Value: "2" }
+	//             - Operator { Value: "*" }
+	//             - Integer { Value: "2" }
+}
+
 func ExampleParse_complex_expression() {
 	tokens, err := ergolas.Tokenize(`foo (bar 1 2 3 "hi") (baz (3 * 4.0 + (2 ^ 3)) :symbol)`)
 	if err != nil {

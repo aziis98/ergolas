@@ -8,20 +8,21 @@ import (
 )
 
 var (
-	ProgramNode          NodeType = "Program"
-	ExpressionsNode      NodeType = "Expressions"
-	FunctionCallNode     NodeType = "FunctionCall"
-	BinaryExpressionNode NodeType = "Binary"
-	UnaryExpressionNode  NodeType = "Unary"
-	QuotedExpressionNode NodeType = "Quoted"
-	PropertyAccessNode   NodeType = "PropertyAccess"
-	ParenthesisNode      NodeType = "Parenthesis"
-	IdentifierNode       NodeType = "Identifier"
-	BlockNode            NodeType = "Block"
-	IntegerNode          NodeType = "Integer"
-	FloatNode            NodeType = "Float"
-	StringNode           NodeType = "String"
-	OperatorNode         NodeType = "Operator"
+	ProgramNode           NodeType = "Program"
+	ExpressionsNode       NodeType = "Expressions"
+	FunctionCallNode      NodeType = "FunctionCall"
+	BinaryExpressionNode  NodeType = "Binary"
+	UnaryExpressionNode   NodeType = "Unary"
+	QuotedExpressionNode  NodeType = "Quoted"
+	UnquoteExpressionNode NodeType = "Unquote"
+	PropertyAccessNode    NodeType = "PropertyAccess"
+	ParenthesisNode       NodeType = "Parenthesis"
+	IdentifierNode        NodeType = "Identifier"
+	BlockNode             NodeType = "Block"
+	IntegerNode           NodeType = "Integer"
+	FloatNode             NodeType = "Float"
+	StringNode            NodeType = "String"
+	OperatorNode          NodeType = "Operator"
 )
 
 type parser struct {
@@ -303,6 +304,9 @@ func (p *parser) parseValue() (Node, error) {
 	if n, err := p.parseQuoted(); err == nil {
 		return n, nil
 	}
+	if n, err := p.parseUnquoted(); err == nil {
+		return n, nil
+	}
 
 	return nil, fmt.Errorf(`expected value but got %s`, p.peek().Type)
 }
@@ -374,6 +378,25 @@ func (p *parser) parseQuoted() (Node, error) {
 	}
 
 	return listNode{QuotedExpressionNode, []Node{inner}}, nil
+}
+
+// parseUnquoted has grammar
+//
+//	<UnquotedExpression> ::= "$" <PropertyOrValue>
+func (p *parser) parseUnquoted() (Node, error) {
+	p.log(`enter parseUnquoted()`, +1)
+	defer p.log(`exit parseUnquoted()`, -1)
+
+	if _, err := p.expectType(UnquoteToken); err != nil {
+		return nil, err
+	}
+
+	inner, err := p.parsePropertyOrValue()
+	if err != nil {
+		return nil, err
+	}
+
+	return listNode{UnquoteExpressionNode, []Node{inner}}, nil
 }
 
 // parseInteger has grammar
